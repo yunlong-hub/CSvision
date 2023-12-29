@@ -1,0 +1,101 @@
+Encoder:
+MobileNetV2dilated
+ResNet18/ResNet18dilated
+ResNet50/ResNet50dilated
+ResNet101/ResNet101dilated
+HRNetV2 (W48)
+Decoder:
+C1 (one convolution module)
+C1_deepsup (C1 + deep supervision trick)
+PPM (Pyramid Pooling Module, see PSPNet paper for details.)
+PPM_deepsup (PPM + deep supervision trick)
+UPerNet (Pyramid Pooling + FPN head, see UperNet for details.)
+
+fc_dim：
+"hrnetv2"：720
+"mobilenetv2dilated"：320
+"resnet18dilated"：512
+"resnet50"：2048
+"resnet50dilated"：2048
+"resnet101"：2048
+"resnet101dilated"：2048
+
+
+encoder没有用的resnet34、resnet34dilated、resnext101
+decoder没有用的ppm、upernet_lite、
+
+
+基本块结构：
+ResNet101 使用称为残差块（Residual Block）的基本结构单元。每个残差块包括几个卷积层，以及一个捷径（shortcut connection），它允许网络在深层中学习更复杂的特征，同时避免梯度消失问题。
+ResNeXt101 使用称为分组卷积（Grouped Convolution）的结构。ResNeXt在残差块中引入了“基数”（cardinality）的概念，这是每个残差块中的分组卷积路径的数量。基数增加可以提高网络的表达能力。
+参数和计算效率：
+ResNet101的设计更为简单直接，但可能在处理某些复杂任务时需要更多的参数。
+ResNeXt101通过分组卷积实现了更高的计算效率和更好的性能。在相同参数量的情况下，ResNeXt通常比ResNet有更好的性能。
+特征学习能力：
+ResNet101优于浅层网络，但在处理大量或复杂特征时可能不如ResNeXt101。
+ResNeXt101通过其分组卷积结构，能够更有效地学习和组合特征，尤其是在图像分类和对象检测等任务中。
+
+Encoder 模型：
+MobileNetV2dilated:
+特点： 基于MobileNetV2的变种，通过引入空洞卷积（dilated convolution）提高感受野。
+应用： 适用于轻量级图像分割任务，如移动设备上的实时分割。
+ResNet18/ResNet18dilated:
+特点： ResNet18是Residual Network的基础模型，ResNet18dilated通过空洞卷积提高感受野。
+应用： 适用于中等规模的图像分割任务，具有较好的性能和计算效率。
+ResNet50/ResNet50dilated:
+特点： ResNet50是深度残差网络，ResNet50dilated通过空洞卷积提高感受野。
+应用： 适用于复杂场景下的图像分割，对较大的图像尺寸和更多类别的分割具有优势。
+ResNet101/ResNet101dilated:
+特点： ResNet101是更深的深度残差网络，ResNet101dilated通过空洞卷积提高感受野。
+应用： 适用于复杂场景和大规模图像分割任务，对精度要求较高的应用。
+HRNetV2 (W48):
+特点： 高分辨率网络（High-Resolution Network），通过保留高分辨率的特征图来提高细节捕捉能力。
+应用： 适用于需要较好细节保留的图像分割任务，如人体姿态分析等。
+
+Decoder 模型：
+C1 (one convolution module):
+特点： 单一卷积模块，简单高效。
+应用： 适用于对计算资源要求较低的图像分割任务。
+C1_deepsup (C1 + deep supervision trick):
+特点： 在C1基础上引入深监督技巧，提高分割效果。
+应用： 适用于需要进一步提高分割性能的任务。
+PPM (Pyramid Pooling Module):
+特点： 金字塔池化模块，综合不同尺度的信息。
+应用： 适用于对尺度变化较敏感的图像分割任务，如城市场景。
+PPM_deepsup (PPM + deep supervision trick):
+特点： 在PPM基础上引入深监督技巧，提高分割性能。
+应用： 综合金字塔池化和深监督，适用于复杂场景和大规模图像分割。
+UPerNet (Pyramid Pooling + FPN head):
+特点： 结合金字塔池化和特征金字塔网络（Feature Pyramid Network）的头部。
+应用： 适用于需要同时考虑全局和局部信息的图像分割任务，如细粒度分类。
+
+IMPORTANT: The base ResNet in our repository is a customized (different from the one in torchvision). The base models will be automatically downloaded when needed.
+
+Architecture	MultiScale Testing	Mean IoU	Pixel Accuracy(%)	Overall Score	Inference Speed(fps)
+MobileNetV2dilated + C1_deepsup	No	34.84	75.75	54.07	17.2
+Yes	33.84	76.80	55.32	10.3
+MobileNetV2dilated + PPM_deepsup	No	35.76	77.77	56.27	14.9
+Yes	36.28	78.26	57.27	6.7
+ResNet18dilated + C1_deepsup	No	33.82	76.05	54.94	13.9
+Yes	35.34	77.41	56.38	5.8
+ResNet18dilated + PPM_deepsup	No	38.00	78.64	58.32	11.7
+Yes	38.81	79.29	59.05	4.2
+ResNet50dilated + PPM_deepsup	No	41.26	79.73	60.50	8.3
+Yes	42.14	80.13	61.14	2.6
+ResNet101dilated + PPM_deepsup	No	42.19	80.59	61.39	6.8
+Yes	42.53	80.91	61.72	2.0
+UperNet50	No	40.44	79.80	60.12	8.4
+Yes	41.55	80.23	60.89	2.9
+UperNet101	No	42.00	80.79	61.40	7.8
+Yes	42.66	81.01	61.84	2.3
+HRNetV2	No	42.03	80.77	61.40	5.8
+Yes	43.20	81.47	62.34	1.9
+
+用于使用多个 GPU 进行训练的动态输入规模
+对于语义分割任务，在训练过程中保持图像的长宽比是有好处的。所以我们重新实现了该DataParallel模块，使其支持在python dict中将数据分发到多个GPU上，这样每个GPU就可以处理不同尺寸的图像。同时，数据加载器的操作也不同。
+现在数据加载器的批量大小始终等于 GPU 的数量，每个元素将被发送到 GPU。它还兼容多处理。请注意，多处理数据加载器的文件索引存储在主进程上，这与我们每个工作进程维护自己的文件列表的目标相矛盾。因此，我们使用一个技巧，尽管主进程仍然为数据加载器提供函数索引__getitem__，但我们只是忽略此类请求并发送随机批处理字典。另外，由数据加载器分叉的多个工作人员都具有相同的种子，如果我们直接使用上述技巧，您会发现多个工作人员将产生完全相同的数据。因此，我们添加一行代码，numpy.random在数据加载器中激活多个工作线程之前设置默认种子。
+
+最先进的模型
+PSPNet是场景解析网络，它通过金字塔池模块（PPM）聚合全局表示。它是 ILSVRC'16 MIT 场景解析挑战赛的获胜模型。详情请参阅https://arxiv.org/abs/1612.01105 。
+UPerNet是基于特征金字塔网络（FPN）和金字塔池模块（PPM）的模型。它不需要扩张卷积，这是一个消耗时间和内存的运算符。没有花里胡哨的东西，它与 PSPNet 相当甚至更好，同时需要更短的训练时间和更少的 GPU 内存。详情请参阅https://arxiv.org/abs/1807.10221 。
+HRNet是最近提出的模型，它在整个模型中保留了高分辨率表示，而没有传统的瓶颈设计。它在一系列像素标记任务上实现了 SOTA 性能。详情请参阅https://arxiv.org/abs/1904.04514 。
