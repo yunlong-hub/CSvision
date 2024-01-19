@@ -32,11 +32,11 @@ TRAIN:
   seed: 304
 
 VAL:
-  visualize: False
-  checkpoint: "epoch_20.pth"
+  visualize: True
+  checkpoint: "epoch_10.pth"
 
 TEST:
-  checkpoint: "epoch_20.pth"
+  checkpoint: "epoch_10.pth"
   result: "./"
 
 DIR: "ckpt/CITY/city-mobilenetv2dilated-ppm_deepsup"

@@ -32,8 +32,8 @@ TRAIN:
   seed: 304
 
 VAL:
-  visualize: False
-  checkpoint: "epoch_20.pth"
+  visualize: True
+  checkpoint: "epoch_10.pth"
 
 TEST:
   checkpoint: "epoch_20.pth"

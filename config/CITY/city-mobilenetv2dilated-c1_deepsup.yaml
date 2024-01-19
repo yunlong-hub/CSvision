@@ -12,7 +12,7 @@ MODEL:
   arch_encoder: "mobilenetv2dilated"
   arch_decoder: "c1_deepsup"
   fc_dim: 320
-
+#
 TRAIN:
     # num_samples 2975
   batch_size_per_gpu: 3
@@ -32,8 +32,8 @@ TRAIN:
   seed: 304
 
 VAL:
-  visualize: False
-  checkpoint: "epoch_20.pth"
+  visualize: True
+  checkpoint: "epoch_10.pth"
 
 TEST:
   checkpoint: "epoch_20.pth"

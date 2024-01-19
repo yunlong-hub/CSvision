@@ -34,11 +34,11 @@ TRAIN:
   seed: 304
 
 VAL:
-  visualize: False
-  checkpoint: "epoch_30.pth"
+  visualize: True
+  checkpoint: "epoch_10.pth"
 
 TEST:
-  checkpoint: "epoch_30.pth"
+  checkpoint: "epoch_10.pth"
   result: "./"
 
 DIR: "ckpt/ADE/ade20k-resnet50-upernet"
