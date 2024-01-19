@@ -17,7 +17,7 @@ if __name__ == '__main__':
     # history = torch.load(args.path)
     # 加载历史数据
     history = torch.load(
-        '/data/yunlong/Project/CSvision/ckpt/CITY/city-resnet50dilated-ppm_deepsup/val_history.pth'
+        '/data/yunlong/Project/CSvision/ckpt/CITY/city-resnet50-upernet/val_history.pth'
         )
 
     # 下采样数据点
